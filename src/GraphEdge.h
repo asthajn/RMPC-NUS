@@ -10,9 +10,10 @@
 #include "point.h"
 #include "gtype.h"
 #include "GridMap.h"
+#include <vector>
 //#include <unordered_map>
 #include <map>
-#include <boost/unordered_map.hpp>
+//#include <boost/unordered_map.hpp>
 
 namespace std {
 
@@ -20,13 +21,16 @@ class GraphEdge {
 public:
 	GridMap gmObj;
 	GPoint edges[1][2];
-	//int countOfEdge;
 	int countOfEdge;
+	int sizeOfTree = 0;
+	//std::vector<std::vector<GPoint> > treeEdges;
+
+
 	//boost::unordered_multimap<GPoint, GPoint> edgeMap;
 	//multimap<GPoint, GPoint> edgeMap;
 
 	void setGridMapObject(GridMap gm);
-	void addEdge(GPoint p1, GPoint p2);
+	void addEdge(GPoint p1,GPoint p2);
 	//void getEdgeForPoint(GPoint p1);
 	bool isPointPresent(GPoint p1);
 	void increaseSizeEdgeArray();
@@ -37,6 +41,7 @@ public:
 	void initTree(GPoint p1);
 	int getNearestNodeIndex(int randNum);
 	double getDistance(GPoint p1, GPoint p2);
+	std::vector<std::vector<GPoint> > getTreeToMain();
 	/*GraphEdge();
 	virtual ~GraphEdge();*/
 };

@@ -20,10 +20,12 @@ GridMap gmObj;
 GPoint edges[6][2];//= new GPoint[1][2];
 double minDistance = 0.0;
 int minDistancePoint = 0;
+//int sizeOfTree= 0;
 //boost::unordered_multimap<GPoint, GPoint> edgeMap;
 //multimap<GPoint, GPoint> edgeMap;
-std::vector< std::vector<GPoint> > treeEdges(10000);
-
+//vector<vector<GPoint> > treeEdges(1000);
+std::vector<std::vector<GPoint> > treeEdges(10000);
+//this->
 //int countOfEdge;
 void GraphEdge::setGridMapObject(GridMap gm)
 {
@@ -34,9 +36,6 @@ void GraphEdge::setGridMapObject(GridMap gm)
 }
 void GraphEdge::addEdge(GPoint p1, GPoint p2)
 {
-	/*cout<<"\nInside Add Edge function";
-	cout.flush();*/
-
 	std::vector<GPoint> edgeEndPoints;
 
 	edgeEndPoints.push_back(p2);
@@ -46,8 +45,9 @@ void GraphEdge::addEdge(GPoint p1, GPoint p2)
 	cout.flush();
 	treeEdges[index].push_back(p2);
 
-	cout<<"\nEdge added is  : ("<<p1.getX()<<", "<<p1.getY()<<") --> ("<<p2.getX()<<", "<<p2.getY()<<")\n\n";
+	//cout<<"\nEdge added is  : ("<<p1.getX()<<", "<<p1.getY()<<") --> ("<<p2.getX()<<", "<<p2.getY()<<")\n\n";
 	cout.flush();
+	sizeOfTree++;
 }
 
 int GraphEdge::getIndex(GPoint p1)
@@ -89,7 +89,7 @@ void GraphEdge::printAllEdges(GPoint p1)
 	}
 }
 
-/*Returns the length of */
+/*Returns the length of a vector of type GPoint*/
 int GraphEdge::getLength(std::vector<GPoint> vect)
 {
 	int count = 0;
@@ -131,6 +131,7 @@ int GraphEdge::getNearestNodeIndex(int randNum)
 	{
 		if(getLength(treeEdges[i])!=0)
 		{
+			//cout<<"\nLength at index "<<i<<" is "<<getLength(treeEdges[i]);
 			dist = getDistance(gmObj.points[i],gmObj.points[randNum]);
 			if(minDistance == 0)
 			{
@@ -151,8 +152,10 @@ int GraphEdge::getNearestNodeIndex(int randNum)
 			}
 		}
 
-		return minDistancePoint;
 	}
+	minDistance = 0;
+	return minDistancePoint;
+
 }
 
 double GraphEdge::getDistance(GPoint p1, GPoint p2)
@@ -178,6 +181,10 @@ void GraphEdge::printGraphEdges()
 
 }
 
+std::vector<std::vector<GPoint> > GraphEdge::getTreeToMain()
+{
+	return treeEdges;
+}
 
 /*
 GraphEdge::GraphEdge() {
