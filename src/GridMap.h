@@ -12,6 +12,12 @@
 #include "basicgraph.h"
 #include "point.h"
 #include "gtype.h"
+#include <unordered_map>
+#include <fontconfig/fontconfig.h>
+#include <random>
+#include <cairo/cairo.h>
+#include <stdlib.h>
+#include <functional>
 //#include "gobject.h"
 //#include <unordered_map>
 //#include <boost/unordered_map.hpp>
@@ -29,13 +35,15 @@ public:
 	float maxSizeX;
 	float maxSizeY;
 	int count;
+	int range_end = 500;
+    int number = 1000;
+
 	GPoint points[10000];
 	float obsPoints[5][2] = {{7.1,8.2},
 			{2.1,3.2},
 			{2.1,4.5},
 			{5.6,4.5},
 			{5.6,3.2}};
-	//float obsPoints[5][2];
 
 /*public:
 	static GridMap* getInstance();*/

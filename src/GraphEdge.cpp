@@ -13,25 +13,20 @@
 #include <vector>
 //#include <unordered_map>
 #include <boost/unordered_map.hpp>
+#include <cairo/cairo.h>
+#include <time.h>
 
 namespace std {
 
 GridMap gmObj;
-GPoint edges[6][2];//= new GPoint[1][2];
 double minDistance = 0.0;
 int minDistancePoint = 0;
-//int sizeOfTree= 0;
-//boost::unordered_multimap<GPoint, GPoint> edgeMap;
-//multimap<GPoint, GPoint> edgeMap;
-//vector<vector<GPoint> > treeEdges(1000);
 std::vector<std::vector<GPoint> > treeEdges(10000);
-//this->
-//int countOfEdge;
+
+
 void GraphEdge::setGridMapObject(GridMap gm)
 {
-	cout<<"\nSetting object";
 	gmObj = gm;
-	cout<<"\nObject set";
 	cout.flush();
 }
 void GraphEdge::addEdge(GPoint p1, GPoint p2)
@@ -52,7 +47,7 @@ void GraphEdge::addEdge(GPoint p1, GPoint p2)
 
 int GraphEdge::getIndex(GPoint p1)
 {
-	for(int i = 0; i<10000;i++)
+	for(int i = 0; i<1000;i++)
 	{
 		if(gmObj.points[i] == p1)
 		{
@@ -62,9 +57,9 @@ int GraphEdge::getIndex(GPoint p1)
 
 }
 
-bool GraphEdge::isPointPresent(GPoint p1)
+bool GraphEdge::isPointPresent(GPoint p1, int size)
 {
-	int lenPoints = (sizeof(gmObj.points)/sizeof(gmObj.points[0]));
+	int lenPoints = size;		//(sizeof(gmObj.points)/sizeof(gmObj.points[0]));
 	for (int i = 0;i<lenPoints;i++)
 	{
 		if(gmObj.points[i] == p1)
@@ -81,10 +76,10 @@ void GraphEdge::printAllEdges(GPoint p1)
 {
 	int index = getIndex(p1);
 	int length = getLength(treeEdges[index]);
-	cout<<"\n Edges for point ("<<p1.getX()<<", "<<p1.getY()<<")";
+	//cout<<"\n Edges for point ("<<p1.getX()<<", "<<p1.getY()<<")";
 	cout.flush();
 	for(int i = 0;i<length;i++){
-		cout<<"\n("<<treeEdges[index][i].getX()<<", "<<treeEdges[index][i].getY()<<")";
+		//cout<<"\n("<<treeEdges[index][i].getX()<<", "<<treeEdges[index][i].getY()<<")";
 		cout.flush();
 	}
 }
@@ -110,29 +105,23 @@ void GraphEdge::increaseSizeEdgeArray()
 
 	memcpy(edgeArrayTemp, edges, length);
 
-/*
-	edges = edgeArrayTemp;
-	delete[] edgeArrayTemp;
-*/
-
 }
 
 void GraphEdge::initTree(GPoint p1)
 {
 	int index = getIndex(p1);
-
 }
 
-int GraphEdge::getNearestNodeIndex(int randNum)
+int GraphEdge::getNearestNodeIndex(GPoint pnt)
 {
 	double dist;
 	int len;
-	for (int i = 0;i<10000;i++)
+	for (int i = 0;i<1000;i++)
 	{
 		if(getLength(treeEdges[i])!=0)
 		{
 			//cout<<"\nLength at index "<<i<<" is "<<getLength(treeEdges[i]);
-			dist = getDistance(gmObj.points[i],gmObj.points[randNum]);
+			dist = getDistance(gmObj.points[i],pnt);
 			if(minDistance == 0)
 			{
 				minDistance = dist;
@@ -142,7 +131,7 @@ int GraphEdge::getNearestNodeIndex(int randNum)
 			len = getLength(treeEdges[i]);
 			for(int j = 0;j<len;j++)
 			{
-				dist = getDistance(treeEdges[i][j],gmObj.points[randNum]);
+				dist = getDistance(treeEdges[i][j],pnt);
 				if(dist<minDistance)
 				{
 					minDistance = dist;
@@ -163,6 +152,70 @@ double GraphEdge::getDistance(GPoint p1, GPoint p2)
 	return pow((pow((p1.getX() - p2.getX()),2) + pow((p1.getY() - p2.getY()),2)),0.5);
 }
 
+std::vector<std::vector<GPoint> > GraphEdge::makeTree(int treeSize,int start_index, int randNumber)
+{
+	/*Setting up surface in
+	 * cairo to print the tree*/
+	cairo_surface_t *surface_1;
+	cairo_t *cr_1;
+
+	surface_1 = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, range_end, range_end);
+	cr_1 = cairo_create(surface_1);
+	cairo_set_source_rgb(cr_1, 0, 0, 0);
+	cairo_select_font_face(cr_1, "Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
+	cairo_set_font_size(cr_1, 40.0);
+	cairo_set_line_width (cr_1, 2.0);
+
+
+
+		//srand (time(NULL));
+		randomNumberList.push_back(randNumber);  //This list will maintain the random numbers already selected
+		for(int i = 0;i<treeSize;i++)
+		{
+			while(isElementPresent(randNumber))		//IF a particular random number (index) has already been considered,
+			{										//we don't consider it again.
+				randNumber = rand() % 10000;
+			}
+			randomNumberList.push_back(randNumber);
+		//	cout<<"\nRandom number being generated : "<<randNumber;
+			if(countNodesTree == 0)
+			{
+				//cout<<"\nAdding the first node into tree";
+				addEdge(gmObj.points[start_index],gmObj.points[randNumber]);
+				countNodesTree++;
+			}
+			else if(countNodesTree > 0)
+			{
+				//cout<<"\ngmObj.points[start_index] : "<<nearestIndex<<"--("<<gmObj.points[nearestIndex].getX()<<", "<<gmObj.points[nearestIndex].getY()<<")";
+				//cout<<"\ngmObj.points[randNumber] : "<<randNumber<<"--"<<gmObj.points[randNumber].getX()<<", "<<gmObj.points[randNumber].getY()<<")";
+				nearestIndex = getNearestNodeIndex(gmObj.points[randNumber]);
+				addEdge(gmObj.points[nearestIndex],gmObj.points[randNumber]);
+				countNodesTree++;
+			}
+
+
+			  cairo_arc(cr_1, gmObj.points[nearestIndex].getX(), gmObj.points[nearestIndex].getY(), 0.5 , 0 , 2 * 3.14);
+			  cairo_arc(cr_1, gmObj.points[randNumber].getX(), gmObj.points[randNumber].getY(), 0.5 , 0 , 2 * 3.14);
+			  cairo_stroke(cr_1);
+
+		}
+		cairo_surface_write_to_png(surface_1, "tree.png");
+		return treeEdges;
+}
+
+
+bool GraphEdge::isElementPresent(int num)
+{
+	for (std::vector<int>::iterator it = randomNumberList.begin();it!=randomNumberList.end();it++)
+	{
+		if(num == *it)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
 
 
 void GraphEdge::printGraphEdges()
@@ -185,6 +238,7 @@ std::vector<std::vector<GPoint> > GraphEdge::getTreeToMain()
 {
 	return treeEdges;
 }
+
 
 /*
 GraphEdge::GraphEdge() {

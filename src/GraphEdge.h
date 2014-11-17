@@ -23,25 +23,25 @@ public:
 	GPoint edges[1][2];
 	int countOfEdge;
 	int sizeOfTree = 0;
-	//std::vector<std::vector<GPoint> > treeEdges;
-
-
-	//boost::unordered_multimap<GPoint, GPoint> edgeMap;
-	//multimap<GPoint, GPoint> edgeMap;
-
+	int range_end = 500;
+	std::vector<int> randomNumberList;
+	int countNodesTree = 0;
+	int nearestIndex = 0;
 	void setGridMapObject(GridMap gm);
 	void addEdge(GPoint p1,GPoint p2);
 	//void getEdgeForPoint(GPoint p1);
-	bool isPointPresent(GPoint p1);
+	bool isPointPresent(GPoint p1, int size);
 	void increaseSizeEdgeArray();
 	void printGraphEdges();
 	int getIndex(GPoint p1);
 	void printAllEdges(GPoint p1);
 	int getLength(std::vector<GPoint> vect);
 	void initTree(GPoint p1);
-	int getNearestNodeIndex(int randNum);
+	int getNearestNodeIndex(GPoint pnt);
 	double getDistance(GPoint p1, GPoint p2);
+	bool isElementPresent(int num);
 	std::vector<std::vector<GPoint> > getTreeToMain();
+	std::vector<std::vector<GPoint> > makeTree(int treeSize,int startIndex, int randomNumber);
 	/*GraphEdge();
 	virtual ~GraphEdge();*/
 };

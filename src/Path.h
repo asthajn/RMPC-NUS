@@ -20,14 +20,17 @@ namespace std {
 class Path {
 public:
 	vector<GPoint> path;
-	int start, goal,len;
+	int start, goal,len, treeSize;
+	bool isStartPntPresent, isGoalPntPresent, appendStartFlag;
 	GraphEdge geObject;
 	GridMap gmObject;
+	GPoint startPnt;
 	std::vector<std::vector<GPoint> > treeEdgesPath;
-	Path(int start_index, int goal_index, GraphEdge geObj, GridMap gmObj, std::vector<std::vector<GPoint> > treeEdges);
-	//virtual ~Path();
-	void getPath(int goal_index);
+	Path(int start_index, int goal_index, GraphEdge geObj, GridMap gmObj, std::vector<std::vector<GPoint> > treeEdges,int treeSize);
+	void getPath(int goal_idx);
 	void printPath();
+	int connectStartToTree(GPoint startPnt, GPoint goalPnt);
+
 };
 
 } /* namespace std */
