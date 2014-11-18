@@ -23,6 +23,11 @@ using namespace std;
 
 typedef std::multimap<float, float> floatMultiMap;
 
+
+GridMap::GridMap(int numberOfSamples)
+{
+	this->number = numberOfSamples;
+}
 void GridMap::InitVariables()
 {
 	maxSizeX = 10.0;
@@ -47,7 +52,9 @@ void GridMap::InitPointsMap()
 	double y[number];
 	double temp1, temp2;
 	vector<double> dice_roll;
-	for(int i=0;i<number;i++)
+	cout<<"\nGenerating samples";
+	cout.flush();
+	for(int i=0;i<this->number;i++)
 	{
 		temp1 = distribution(generator);
 		dice_roll.push_back(temp1);
@@ -66,13 +73,13 @@ void GridMap::InitPointsMap()
 void GridMap::PrintPointMap(GPoint pts[])
 {
 
-/*
+
 	for(int i = 0;i<count;i++)
 		{
-			cout<<"\nPoint @"<<i<<" is : (" <<pts[i].getX()<<", "<<pts[i].getY()<<")";
+			//cout<<"\nPoint @"<<i<<" is : (" <<pts[i].getX()<<", "<<pts[i].getY()<<")";
 
 		}
-*/
+
 
 	cairo_surface_t *surface;
 	cairo_t *cr;
@@ -87,7 +94,7 @@ void GridMap::PrintPointMap(GPoint pts[])
 	cairo_set_line_width (cr, 2.0);
 
 
-	for (int i=0; i<number ; i++)
+	for (int i=0; i<this->number ; i++)
 	{
 	  cairo_arc(cr, points[i].getX(), points[i].getY(), 0.5 , 0 , 2 * 3.14);
 	  cairo_stroke(cr);

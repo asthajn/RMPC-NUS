@@ -19,29 +19,37 @@ namespace std {
 
 class GraphEdge {
 public:
-	GridMap gmObj;
+	GraphEdge(int numberOfSamples, int treeLength);
+	//GridMap gmObj;
 	GPoint edges[1][2];
 	int countOfEdge;
-	int sizeOfTree = 0;
+	int sizeOfTree=0;
+	int numberOfSamples, treeLength;
+	int randNumber;
 	int range_end = 500;
-	std::vector<int> randomNumberList;
+
 	int countNodesTree = 0;
 	int nearestIndex = 0;
+	int alpha = 3;
+	int ctr;
 	void setGridMapObject(GridMap gm);
 	void addEdge(GPoint p1,GPoint p2);
 	//void getEdgeForPoint(GPoint p1);
-	bool isPointPresent(GPoint p1, int size);
+	bool isPointPresent(GPoint p1, int size, GridMap gm2);
 	void increaseSizeEdgeArray();
 	void printGraphEdges();
-	int getIndex(GPoint p1);
+	int getIndex(GPoint p1, GridMap gm1);
 	void printAllEdges(GPoint p1);
 	int getLength(std::vector<GPoint> vect);
 	void initTree(GPoint p1);
 	int getNearestNodeIndex(GPoint pnt);
 	double getDistance(GPoint p1, GPoint p2);
-	bool isElementPresent(int num);
+	bool isElementPresent(int num, std::vector<int> List);
 	std::vector<std::vector<GPoint> > getTreeToMain();
-	std::vector<std::vector<GPoint> > makeTree(int treeSize,int startIndex, int randomNumber);
+	void makeTree(int treeSize,int startIndex);
+	bool areDoubleEqual(double a, double b, double x);
+	bool isPointPresentString(GPoint p1, int size, GridMap gm2);
+
 	/*GraphEdge();
 	virtual ~GraphEdge();*/
 };

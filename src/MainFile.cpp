@@ -17,11 +17,12 @@ using namespace std;
 
 using namespace std;
 
-int start_index = 172;
+int start_index;
 int goal_index = 2142;
 int countNodesTree = 0;
-int treeSize = 150;
-std::vector<std::vector<GPoint> > tree(treeSize);
+int treeSize = 10000;
+int numberOfSamples = 10000;
+std::vector<std::vector<GPoint> > tree;
 int nearestIndex = 0;
 //std::vector<int> randomNumberList;
 std::vector<GPoint> pathPoints;
@@ -34,28 +35,39 @@ int goal;
 int main() {
 
 	GPoint startPnt = GPoint(33.9734, 89.7077);
-	GPoint goalPnt = GPoint(432.962, 410.464);		//412.464
+	GPoint goalPnt = GPoint(384.806, 484.686);		//432.962, 412.464)  Point @2163 is : (384.806, 484.686)
+
 
 
 	/*Defining sample points */
-	GridMap gm;
+	GridMap gm(numberOfSamples);
 	gm.InitVariables();
 	gm.InitPointsMap();
 
 
 	/*Making rapidly exploring random tree*/
-	GraphEdge geObj;
+	GraphEdge geObj(numberOfSamples, treeSize);
+	start_index = geObj.getIndex(startPnt,gm);
+	goal_index = geObj.getIndex(goalPnt,gm);
 	geObj.setGridMapObject(gm);
-	int randNumber = rand() % treeSize;
-	geObj.makeTree(treeSize, start_index,randNumber);
+	geObj.makeTree(treeSize, start_index);
+
 	tree  = geObj.getTreeToMain();
+	cout<<"\nBack to main \n";
+	cout.flush();
 
 
 	/*Getting path based on  a fixed goal node*/
-	Path pathObj(start_index,goal_index,geObj,gm,tree,treeSize);
-	goal = pathObj.connectStartToTree(startPnt, goalPnt);
-	pathObj.getPath(goal);
-	pathObj.printPath();
+	cout<<"\nstartPnt : "<<startPnt.getX()<<"---"<<startPnt.getY();
+	cout.flush();
+	cout<<"\nstart_index : "<<geObj.getIndex(startPnt,gm);
+	Path pathObj(start_index,goal_index,geObj,gm,tree,treeSize, numberOfSamples);
+
+	goal = pathObj.connectStartToTree(startPnt, goalPnt,geObj, gm);
+
+	pathObj.getPath(goal, geObj, gm, tree);
+
+	pathObj.printPath(geObj, gm);
 
 
 	  return 0;

@@ -32,11 +32,12 @@ class GridMap {
 
 	//virtual ~GridMap();
 public:
+	GridMap(int numberOfSamples);
 	float maxSizeX;
 	float maxSizeY;
 	int count;
 	int range_end = 500;
-    int number = 1000;
+    int number;
 
 	GPoint points[10000];
 	float obsPoints[5][2] = {{7.1,8.2},
