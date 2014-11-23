@@ -25,7 +25,7 @@ namespace std {
 double minDistance = 0.0;
 int minDistancePoint = 0;
 int temp = 0;
-std::vector<std::vector<GPoint> > treeEdges(10000);
+std::vector<std::vector<GPoint> > treeEdges(1000);
 std::vector<int> randomNumberList;
 GridMap gmObj(temp);
 
@@ -34,7 +34,6 @@ GraphEdge::GraphEdge(int numberOfSamples, int treeLength)
 {
 	this->numberOfSamples = numberOfSamples;
 	this->treeLength = treeLength;
-
 }
 
 
@@ -63,8 +62,8 @@ int GraphEdge::getIndex(GPoint p1, GridMap gm1)
 	//cout<<"\nnumberOfSamples   "<<this->numberOfSamples;
 	for(int i = 0; i<this->numberOfSamples;i++)
 	{
-		//if(i==2163){cout<<"\ngm1.points[i].getX() : "<<gm1.points[i].getX(); cout<<"\np1 : "<<p1.getX();};
-		if(areDoubleEqual(gm1.points[i].getX(),p1.getX(),0.001) && areDoubleEqual(gm1.points[i].getY(),p1.getY(),0.001))
+		if(i==41){cout<<"\ngm1.points[i].getX() : "<<gm1.points[i].getX(); cout<<"\np1 : "<<p1.getX();};
+		if(gm1.points[i].getX() == p1.getX() && gm1.points[i].getY() == p1.getY())
 		{
 			return i;
 		}
@@ -74,7 +73,10 @@ int GraphEdge::getIndex(GPoint p1, GridMap gm1)
 
 bool GraphEdge::areDoubleEqual(double a, double b, double x)
 {
-	return ((a-b)<x && (a-b)>=0);
+	cout<<"\n("<<a<<"-"<<b<<")"<<(a-b);
+	if(a>b){return ((a-b)<x);}
+	else{return ((b-a)<x);}
+
 }
 
 
@@ -90,7 +92,7 @@ bool GraphEdge::isPointPresent(GPoint p1, int size, GridMap gm2)
 			cout<<"\nPoint @ 2163 is : (" <<gm2.points[2163].getX()<<", "<<gm2.points[2163].getY()<<")";
 			cout<<"\n\nCOMPARISON"<<areDoubleEqual(gm2.points[2163].getX(),p1.getX(),0.001)<<" and "<<areDoubleEqual(gm2.points[2163].getX(),p1.getX(),0.001);
 		}
-		if((areDoubleEqual(gm2.points[i].getX(),p1.getX(),0.001)) && (areDoubleEqual(gm2.points[i].getY(),p1.getY(),0.001)))
+		if((gm2.points[i].getX() == p1.getX()) && (gm2.points[i].getY() == p1.getY()))
 		{
 			return true;
 		}
@@ -169,7 +171,7 @@ int GraphEdge::getNearestNodeIndex(GPoint pnt)
 {
 	double dist;
 	int len;
-	for (int i = 0;i<10000;i++)
+	for (int i = 0;i<1000;i++)
 	{
 		if(getLength(treeEdges[i])!=0)
 		{
@@ -206,65 +208,71 @@ double GraphEdge::getDistance(GPoint p1, GPoint p2)
 	return pow((pow((p1.getX() - p2.getX()),2) + pow((p1.getY() - p2.getY()),2)),0.5);
 }
 
-void GraphEdge::makeTree(int treeSize,int start_index)
+void GraphEdge::makeTree(GridMap gm3,int treeSize,int start_index, int goal_index)
 {
-	//cout<<"\nNumber of samples and tree length set as : "<<this->numberOfSamples<<" "<<treeSize;
-	/*Setting up surface in
-	 * cairo to print the tree*/
-	cairo_surface_t *surface_1;
-	cairo_t *cr_1;
+		cout<<"\nNumber of samples and tree length set as : "<<this->numberOfSamples<<" "<<treeSize<<"SG"<<start_index<<"="<<goal_index;
+		cout.flush();
+		/*Setting up surface in
+		 * cairo to print the tree*/
+		cairo_surface_t *surface_1;
+		cairo_t *cr_1;
 
-	surface_1 = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, range_end, range_end);
-	cr_1 = cairo_create(surface_1);
-	cairo_set_source_rgb(cr_1, 0, 0, 0);
-	cairo_select_font_face(cr_1, "Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
-	cairo_set_font_size(cr_1, 40.0);
-	cairo_set_line_width (cr_1, 2.0);
+		surface_1 = cairo_image_surface_create_from_png("terrain_project.png");//(CAIRO_FORMAT_ARGB32, range_end, range_end);
+		cr_1 = cairo_create(surface_1);
+		cairo_set_source_rgb(cr_1, 0, 0, 0);
+		cairo_select_font_face(cr_1, "Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
+		cairo_set_font_size(cr_1, 40.0);
+		cairo_set_line_width (cr_1, 1.5);
 
-
+		//dist_SG = getDistance(gm3.points[start_index],gm3.points[goal_index]);
+		//double dist_SRandm = 0.00;
+		//double dist_RandmG = 0.00;
+		//bool beta = false;
 
 		//srand (time(NULL));
 		ctr = 0;
-		randNumber = rand() % 10000;
+		randNumber = rand() % 1000;
 		bool ret = false;
 		randomNumberList.push_back(randNumber);  //This list will maintain the random numbers already selected
-		//cout<<"\nValue generated for the first time "<<randNumber;
-		for(int i = 0;i<10000;i++)
-		{   //IF a particular random number (index) has already been considered,
-			//we don't consider it again.
-			ret = isElementPresent(randNumber, randomNumberList);
-			if(i>0){
+		cout<<"\nValue generated for the first time "<<randNumber;
+
+		/*IF a particular random number (index) has
+		 *already been considered, we don't consider it again.*/
+		for(int i = 0;i<1000;i++)
+		{
+		ret = isElementPresent(randNumber, randomNumberList);
+		if(i>0){
 			while(ret)
 			{
-				randNumber = rand() % 10000;
+				randNumber = rand() % 1000;
+				/*dist_SRandm = getDistance(gmObj.points[start_index],gmObj.points[randNumber]);
+				dist_RandmG = getDistance(gmObj.points[randNumber],gmObj.points[goal_index]);
+				beta = (dist_SRandm + dist_RandmG)>dist_SG;*/
 				ret = isElementPresent(randNumber, randomNumberList);
-				//cout<<"\nValue generated inside while "<<randNumber;
-				//cout<<"\nIs number present : "<<ret;
-
 			}
 
 			randomNumberList.push_back(randNumber);
-			}
+		}
 
-			if(countNodesTree == 0)
-			{
-				addEdge(gmObj.points[start_index],gmObj.points[randNumber]);
-				countNodesTree++;
-			}
-			else if(countNodesTree > 0)
-			{
-				/*cout<<"\ngmObj.points[start_index] : "<<nearestIndex<<"--("<<gmObj.points[nearestIndex].getX()<<", "<<gmObj.points[nearestIndex].getY()<<")";
-				cout<<"\ngmObj.points[randNumber] : "<<randNumber<<"--"<<gmObj.points[randNumber].getX()<<", "<<gmObj.points[randNumber].getY()<<")";*/
-				nearestIndex = getNearestNodeIndex(gmObj.points[randNumber]);
-				addEdge(gmObj.points[nearestIndex],gmObj.points[randNumber]);
-				countNodesTree++;
-			}
-			cout<<"\n"<<i;
+		if(countNodesTree == 0)
+		{
+			addEdge(gm3.points[start_index],gm3.points[randNumber]);
+			countNodesTree++;
+		}
+		else if(countNodesTree > 0)
+		{
+			/*cout<<"\ngmObj.points[start_index] : "<<nearestIndex<<"--("<<gmObj.points[nearestIndex].getX()<<", "<<gmObj.points[nearestIndex].getY()<<")";
+			cout<<"\ngmObj.points[randNumber] : "<<randNumber<<"--"<<gmObj.points[randNumber].getX()<<", "<<gmObj.points[randNumber].getY()<<")";*/
+			nearestIndex = getNearestNodeIndex(gm3.points[randNumber]);
+			addEdge(gm3.points[nearestIndex],gm3.points[randNumber]);
+			countNodesTree++;
+		}
+		cout<<"\n"<<i;
 
 
-			  cairo_arc(cr_1, gmObj.points[nearestIndex].getX(), gmObj.points[nearestIndex].getY(), 0.5 , 0 , 2 * 3.14);
-			  cairo_arc(cr_1, gmObj.points[randNumber].getX(), gmObj.points[randNumber].getY(), 0.5 , 0 , 2 * 3.14);
-			  cairo_stroke(cr_1);
+		  cairo_arc(cr_1, gm3.points[nearestIndex].getX(), 500 - gm3.points[nearestIndex].getY(), 0.5 , 0 , 2 * 3.14);
+		  cairo_arc(cr_1, gm3.points[randNumber].getX(), 500 - gm3.points[randNumber].getY(), 0.5 , 0 , 2 * 3.14);
+		  cairo_stroke(cr_1);
 
 		}
 

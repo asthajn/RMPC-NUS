@@ -27,16 +27,16 @@ GPoint::GPoint() {
     y = 0;
 }
 
-GPoint::GPoint(double x, double y) {
+GPoint::GPoint(int x, int y) {
     this->x = x;
     this->y = y;
 }
 
-double GPoint::getX() const {
+int GPoint::getX() const {
     return x;
 }
 
-double GPoint::getY() const {
+int GPoint::getY() const {
     return y;
 }
 

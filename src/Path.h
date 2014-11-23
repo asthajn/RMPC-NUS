@@ -13,12 +13,16 @@
 #include "gtype.h"
 #include "point.h"
 #include <vector>
-
-
+#include <string>
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui/highgui.hpp>
+using namespace cv;
 namespace std {
 
 class Path {
 public:
+
 	vector<GPoint> path;
 	int start, goal,len, treeSize, numberOfSamples;
 	bool isStartPntPresent, isGoalPntPresent, appendStartFlag;

@@ -29,7 +29,7 @@ public:
      * the default constructor sets these fields to 0.
      */
     GPoint();
-    GPoint(double x, double y);
+    GPoint(int x, int y);
     //GPoint(const GPoint &obj);
     /*
      * Method: getX
@@ -37,7 +37,7 @@ public:
      * ----------------------------
      * Returns the x component of the point.
      */
-    double getX() const;
+    int getX() const;
 
     /*
      * Method: getY
@@ -45,7 +45,7 @@ public:
      * ----------------------------
      * Returns the y component of the point.
      */
-    double getY() const;
+    int getY() const;
 
     /*
      * Method: toString
@@ -68,8 +68,8 @@ public:
     /**********************************************************************/
 private:
     /* Instance variables */
-    double x;                       /* The x-coordinate of the point */
-    double y;                       /* The y-coordinate of the point */
+    int x;                       /* The x-coordinate of the point */
+    int y;                       /* The y-coordinate of the point */
 
     /* Friend declarations */
     friend bool operator==(const GPoint & p1, const GPoint & p2);

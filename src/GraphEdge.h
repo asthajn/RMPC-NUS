@@ -27,7 +27,7 @@ public:
 	int numberOfSamples, treeLength;
 	int randNumber;
 	int range_end = 500;
-
+	double dist_SG = 0.00;
 	int countNodesTree = 0;
 	int nearestIndex = 0;
 	int alpha = 3;
@@ -46,7 +46,7 @@ public:
 	double getDistance(GPoint p1, GPoint p2);
 	bool isElementPresent(int num, std::vector<int> List);
 	std::vector<std::vector<GPoint> > getTreeToMain();
-	void makeTree(int treeSize,int startIndex);
+	void makeTree(GridMap gm3, int treeSize,int startIndex, int goalIndex);
 	bool areDoubleEqual(double a, double b, double x);
 	bool isPointPresentString(GPoint p1, int size, GridMap gm2);
 

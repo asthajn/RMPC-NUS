@@ -48,10 +48,10 @@ void GridMap::InitPointsMap()
     int range_end=500;
     //unsigned seed = chrono::system_clock::now().time_since_epoch().count();
 	ranlux48 generator;
-	uniform_real_distribution<double> distribution(0,range_end);
-	double y[number];
-	double temp1, temp2;
-	vector<double> dice_roll;
+	uniform_int_distribution<int> distribution(0,range_end);
+	int y[number];
+	int temp1, temp2;
+	vector<int> dice_roll;
 	cout<<"\nGenerating samples";
 	cout.flush();
 	for(int i=0;i<this->number;i++)
@@ -76,7 +76,7 @@ void GridMap::PrintPointMap(GPoint pts[])
 
 	for(int i = 0;i<count;i++)
 		{
-			//cout<<"\nPoint @"<<i<<" is : (" <<pts[i].getX()<<", "<<pts[i].getY()<<")";
+			cout<<"\nPoint @"<<i<<" is : (" <<pts[i].getX()<<", "<<pts[i].getY()<<")";
 
 		}
 

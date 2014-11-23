@@ -39,7 +39,7 @@ public:
 	int range_end = 500;
     int number;
 
-	GPoint points[10000];
+	GPoint points[1000];
 	float obsPoints[5][2] = {{7.1,8.2},
 			{2.1,3.2},
 			{2.1,4.5},

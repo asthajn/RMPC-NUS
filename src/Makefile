@@ -2,7 +2,7 @@ CXX=g++
 DEBUG=-g3
 CXXFLAGS+=${DEBUG} -O3 -Wall -Wextra -c -std=gnu++11 `pkg-config --cflags --libs cairo gtk+-2.0`
 LDFLAGS+=-std=gnu++11 `pkg-config --cflags --libs cairo gtk+-2.0`
-EXEC=car_planning
+EXEC=pRRTPath
 SRC=$(wildcard *.cpp)
 OBJ= $(SRC:.cpp=.o)
 INC=$(wildcard *.h)
@@ -12,7 +12,7 @@ DIST=$(SRC) $(INC) README Makefile
 
 all: $(EXEC)
 
-car_planning: $(OBJ)
+pRRTPath: $(OBJ)
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 %.o: %.cpp

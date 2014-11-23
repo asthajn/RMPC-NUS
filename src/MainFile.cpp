@@ -20,8 +20,8 @@ using namespace std;
 int start_index;
 int goal_index = 2142;
 int countNodesTree = 0;
-int treeSize = 10000;
-int numberOfSamples = 10000;
+int treeSize = 1000;
+int numberOfSamples = 1000;
 std::vector<std::vector<GPoint> > tree;
 int nearestIndex = 0;
 //std::vector<int> randomNumberList;
@@ -34,9 +34,8 @@ int goal;
 
 int main() {
 
-	GPoint startPnt = GPoint(33.9734, 89.7077);
-	GPoint goalPnt = GPoint(384.806, 484.686);		//432.962, 412.464)  Point @2163 is : (384.806, 484.686)
-
+	GPoint startPnt = GPoint(41, 50);		//	(33.9734, 89.7077);
+	GPoint goalPnt = GPoint(465, 252);		//432.962, 412.464)  Point @2163 is : (384.806, 484.686)
 
 
 	/*Defining sample points */
@@ -49,8 +48,10 @@ int main() {
 	GraphEdge geObj(numberOfSamples, treeSize);
 	start_index = geObj.getIndex(startPnt,gm);
 	goal_index = geObj.getIndex(goalPnt,gm);
+	cout<<"\nstart_index = "<<start_index<<" || goal_index = "<<goal_index<<"\n";
+	cout.flush();
 	geObj.setGridMapObject(gm);
-	geObj.makeTree(treeSize, start_index);
+	geObj.makeTree(gm, treeSize, start_index, goal_index);
 
 	tree  = geObj.getTreeToMain();
 	cout<<"\nBack to main \n";
@@ -70,7 +71,7 @@ int main() {
 	pathObj.printPath(geObj, gm);
 
 
-	  return 0;
+	return 0;
 }
 
 
