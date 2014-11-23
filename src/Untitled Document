@@ -1,6 +1,0 @@
-MainFile.o: GridMap.h GraphEdge.h Path.h gtype.h
-GridMap.o: GridMap.h
-GraphEdge.o: GraphEdge.h
-Path.o: Path.h
-gtype.o: gtype.h
-
